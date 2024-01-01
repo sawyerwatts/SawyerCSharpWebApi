@@ -8,36 +8,15 @@ using SawyerWebApiCtlrs.HealthChecks;
 using SawyerWebApiCtlrs.Middleware;
 using Serilog;
 
-// todo: paging? page blobbing?
-
-// todo: review servers, owasp, and logging notes
-
-// todo: test template installation/usage
-
-// todo: docs features in README, and move TODOs to TODO.md
+// todo: get template params working to determine middlewares
+//      https://github.com/dotnet/templating/wiki/Reference-for-template.json#parameter-symbol
+//      https://github.com/dotnet/templating/wiki/Using-Primary-Outputs-for-Post-Actions
+//          https://github.com/dotnet/templating/wiki/Post-Action-Registry
+//      https://github.com/dotnet/templating/wiki/Conditional-processing-and-comment-syntax
+//      look at .NET's webapi template's --use-controllers
 
 var builder = WebApplication.CreateBuilder(args);
 
-// TODO: Review the registered middleware to ensure it is appropriate for the
-//      solution using this template (and pay special attention to the rate
-//      limiting section).
-//      Of note, this template has both JWT and API key middleware. Remove at
-//      least one of them.
-
-// TODO: Replace SampleHealthCheck with a real healthcheck
-//      Additionally, MapHealthChecks could possibly have RequireHost instead
-//      of (or in addition to) existing access control.
-
-// TODO: Proxy (or replace) IdempotentPostsInMemoryCache with another,
-//      persistent cache (if you aren't removing the IdempotentPosts
-//      middleware). See that class for more.
-
-// TODO: RequestSizeLimitAttribute doesn't seem to have middleware support, so
-//      be careful when increasing the request timeout, and/or configure this
-//      in a gateway.
-
-// TODO: You likely want to ensure alerting around CPU, RAM, and billing are
-//      configured.
 
 // ----------------------------------------------------------------------------
 // Non-middleware services

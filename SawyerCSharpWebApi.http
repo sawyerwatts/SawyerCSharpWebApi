@@ -1,10 +1,11 @@
-@SawyerWebApi_HostAddress = http://localhost:5044
-@jwt = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJpc3MiOiJqd3QuaW8iLCJhdWQiOiJtZS5jb20iLCJleHAiOjE3MDUwMDc5NDl9.w4cqaohVzXZa2HHFpI5xrT0_5-tqkN3-_vIz891lqrs
+@SawyerWebApi_HostAddress = http://localhost:5242
+@jwt = a.b.c
 @apiKey = 12345
 
 ###
 
 GET {{SawyerWebApi_HostAddress}}/_health
+Authorization: Bearer {{jwt}}
 X-API-Key: {{apiKey}}
 
 ###
@@ -18,7 +19,7 @@ X-API-Key: {{apiKey}}
 POST {{SawyerWebApi_HostAddress}}/api/v1/WeatherForecast
 Content-Type: application/json
 Accept: application/json
-#Authorization: Bearer {{jwt}}
+Authorization: Bearer {{jwt}}
 X-API-Key: {{apiKey}}
 X-Trace-GUID: 35e42316-319b-4808-b045-96f4ab58d328
 X-Idempotency-Key: sawyersawyer3
