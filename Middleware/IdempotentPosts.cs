@@ -178,7 +178,7 @@ public class IdempotentPosts(
     }
 
     public static void RegisterTo(
-        IHostApplicationBuilder builder)
+        WebApplicationBuilder builder)
     {
         builder.Services.AddTransient<IdempotentPosts>();
         builder.Services.AddOptions<Settings>()
@@ -295,7 +295,7 @@ public class IdempotentPostsInMemoryCache(
     }
 
     public static void RegisterTo(
-        IHostApplicationBuilder builder)
+        WebApplicationBuilder builder)
     {
         builder.Services.AddMemoryCache();
         builder.Services.AddSingleton<IIdempotentPostsCache, IdempotentPostsInMemoryCache>();

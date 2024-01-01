@@ -25,7 +25,7 @@ public static class RateLimiting
     /// Don't forget to use this middleware via <see cref="RateLimiterApplicationBuilderExtensions.UseRateLimiter(Microsoft.AspNetCore.Builder.IApplicationBuilder)"/>.
     /// </remarks>
     public static void Add(
-        IHostApplicationBuilder builder)
+        WebApplicationBuilder builder)
     {
         Settings settings = new();
         builder.Configuration
@@ -57,8 +57,8 @@ public static class RateLimiting
                             new FixedWindowRateLimiterOptions
                             {
                                 AutoReplenishment = true,
-                                PermitLimit = settings.IpPermitLimit,
-                                Window = TimeSpan.FromSeconds(settings.IpWindowSec)
+                                PermitLimit = settings.IdentityOrHostPermitLimit,
+                                Window = TimeSpan.FromSeconds(settings.IdentityOrHostWindowSec)
                             })));
 
             // The built in rate limiter is known to have poor functionality around
@@ -108,9 +108,9 @@ public static class RateLimiting
         public int ConcurrencyQueueLimit { get; set; }
 
         [Range(1, int.MaxValue)]
-        public int IpPermitLimit { get; set; }
+        public int IdentityOrHostPermitLimit { get; set; }
 
         [Range(1, int.MaxValue)]
-        public int IpWindowSec { get; set; }
+        public int IdentityOrHostWindowSec { get; set; }
     }
 }

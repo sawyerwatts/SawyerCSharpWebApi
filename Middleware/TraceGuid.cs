@@ -39,7 +39,7 @@ public class TraceGuid(
     /// Don't forget to use this middleware via <see cref="Middleware"/>.
     /// </remarks>
     public static void RegisterTo(
-        IHostApplicationBuilder builder)
+        WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<TraceGuid>();
         builder.Services.AddOptions<Settings>()

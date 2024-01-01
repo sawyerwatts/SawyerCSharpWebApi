@@ -12,7 +12,7 @@ public class JwtAuthentication
     public const string AuthScheme = "jwt";
 
     public static void Add(
-        IHostApplicationBuilder builder)
+        WebApplicationBuilder builder)
     {
         Settings settings = new();
         builder.Configuration
@@ -25,7 +25,7 @@ public class JwtAuthentication
 
         builder.Services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(AuthScheme, options =>
+            .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {

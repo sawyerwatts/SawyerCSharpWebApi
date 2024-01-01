@@ -10,7 +10,7 @@ public class RequestTimeouts
     /// Don't forget to use this middleware via <see cref="RequestTimeoutsIApplicationBuilderExtensions.UseRequestTimeouts"/>.
     /// </remarks>
     public static void Add(
-        IHostApplicationBuilder builder)
+        WebApplicationBuilder builder)
     {
         Settings settings = new();
         builder.Configuration

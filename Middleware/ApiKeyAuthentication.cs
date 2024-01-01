@@ -64,7 +64,7 @@ public class ApiKeyAuthenticationSchemeHandler
     }
 
     public static void Add(
-        IHostApplicationBuilder builder)
+        WebApplicationBuilder builder)
     {
         Settings settings = new();
         builder.Configuration
