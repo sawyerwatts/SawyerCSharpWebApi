@@ -11,6 +11,17 @@ public class JwtAuthentication
 {
     public const string AuthScheme = "jwt";
 
+    /// <summary>
+    /// This will ensure that the JWT:
+    /// <br /> - Comes from the correct authority
+    /// <br /> - Is sent to the correct audience,
+    /// <br /> - Ensures that the token is active with a configurable clock skew
+    /// <br /> - Uses an algorithm from the configurable list
+    /// <br /> - Uses the configurable issuer signing key to validate the JWT's signature
+    /// <br /> - Is sent with HTTPS metadata
+    /// <br /> - Load the sub claim into `HttpContext.User.Identity.Name`
+    /// </summary>
+    /// <param name="builder"></param>
     public static void Add(
         WebApplicationBuilder builder)
     {
@@ -35,8 +46,9 @@ public class JwtAuthentication
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.IssuerSigningKey)),
                     ValidateSignatureLast = true,
                     ClockSkew = TimeSpan.FromMinutes(settings.ClockSkewSec),
-                    // Default is (for some reason): "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
-                    NameClaimType = "name",
+                    // This uses sub instead of name since sub is both required
+                    // and unique while name is neither of those things.
+                    NameClaimType = "sub",
                 };
 
                 // Otherwise, sub claim will be changed to http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier
