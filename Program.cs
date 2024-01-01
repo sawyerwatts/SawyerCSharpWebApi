@@ -62,8 +62,7 @@ RequestTimeouts.Add(builder);
 RateLimiting.Add(builder);
 
 ApiKeyAuthenticationSchemeHandler.Add(builder);
-// todo: uncomment this
-//JwtAuthentication.Add(builder);
+JwtAuthentication.Add(builder);
 
 // Set the fallback/default authorization policy to requiring authenticated
 // users. Add [AllowAnonymous] or [Authorize(PolicyName="MyPolicy")] to
@@ -92,8 +91,7 @@ builder.Services.AddSwaggerGen(options =>
     IdempotentPosts.SetupSwaggerGen(options);
 
     ApiKeyAuthenticationSchemeHandler.SetupSwaggerGen(options);
-    // todo: uncomment this
-    //JwtAuthentication.SetupSwaggerGen(options);
+    JwtAuthentication.SetupSwaggerGen(options);
 });
 
 
