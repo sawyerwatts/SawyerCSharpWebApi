@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Sawyer",
+  "classifications": [ "Web", "Web API", "API", "Service" ],
+  "identity": "SawyerWebApi",
+  "name": "Sawyer's web API",
+  "shortName": "sawyerwebapi",
+  "sourceName": "SawyerCSharpWebApi",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  }
+}
