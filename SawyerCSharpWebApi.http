@@ -1,4 +1,4 @@
-@SawyerCSharpWebApi_HostAddress = http://localhost:5044
+@SawyerWebApi_HostAddress = http://localhost:5044
 @jwt = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJpc3MiOiJqd3QuaW8iLCJhdWQiOiJtZS5jb20iLCJleHAiOjE3MDUwMDc5NDl9.w4cqaohVzXZa2HHFpI5xrT0_5-tqkN3-_vIz891lqrs
 @apiKey = 12345
 
