@@ -121,6 +121,9 @@ Additionally, this template has a few pre-built options for authentication.
 Once a user has authenticated, they are logged with their host and requested
 URL.
 
+When instantiating a project from this template, there is a required parameter
+to choose the authentication type.
+
 #### API Key
 
 This template will, via the `ApiKeyAuthenticationSchemeHandler` class, require
