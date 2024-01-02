@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Serilog.Context;
 
-namespace SawyerWebApiCtlrs.Middleware;
+namespace SawyerCSharpWebApi.Middleware;
 
 /// <remarks>
 /// When retrieving this service (presumably via constructor dependency

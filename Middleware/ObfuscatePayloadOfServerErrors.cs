@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace SawyerWebApiCtlrs.Middleware;
+namespace SawyerCSharpWebApi.Middleware;
 
 /// <summary>
 /// Server errors, usually caused by uncaught exceptions, can easily leak

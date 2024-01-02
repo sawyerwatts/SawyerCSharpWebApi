@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Http.Timeouts;
 
-namespace SawyerWebApiCtlrs.Middleware;
+namespace SawyerCSharpWebApi.Middleware;
 
 public class RequestTimeouts
 {

@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace SawyerWebApiCtlrs.Middleware;
+namespace SawyerCSharpWebApi.Middleware;
 
 public class JwtAuthentication
 {
@@ -19,7 +19,9 @@ public class JwtAuthentication
     /// <br /> - Uses an algorithm from the configurable list
     /// <br /> - Uses the configurable issuer signing key to validate the JWT's signature
     /// <br /> - Is sent with HTTPS metadata
-    /// <br /> - Load the sub claim into `HttpContext.User.Identity.Name`
+    /// <br /> - Load the sub claim into `HttpContext.User.Identity.Name` (but
+    /// this will <i>not</i> ensure that the sub claim is present. That is
+    /// delegated to <see cref="PolicyServiceCollectionExtensions.AddAuthorization(Microsoft.Extensions.DependencyInjection.IServiceCollection)"/>).
     /// </summary>
     /// <param name="builder"></param>
     public static void Add(
@@ -46,8 +48,7 @@ public class JwtAuthentication
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.IssuerSigningKey)),
                     ValidateSignatureLast = true,
                     ClockSkew = TimeSpan.FromMinutes(settings.ClockSkewSec),
-                    // This uses sub instead of name since sub is both required
-                    // and unique while name is neither of those things.
+                    // This uses sub instead of name since sub is unique.
                     NameClaimType = "sub",
                 };
 
@@ -105,6 +106,6 @@ public class JwtAuthentication
         public string IssuerSigningKey { get; set; } = "";
 
         [Range(1, 60 * 3)]
-        public int ClockSkewSec { get; set; }
+        public int ClockSkewSec { get; set; } = 90;
     }
 }

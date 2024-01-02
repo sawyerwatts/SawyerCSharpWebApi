@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.RateLimiting;
 
-namespace SawyerWebApiCtlrs.Middleware;
+namespace SawyerCSharpWebApi.Middleware;
 
 /// <summary>
 /// There is a lot of control available when rate limiting, including chaining

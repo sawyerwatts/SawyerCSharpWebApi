@@ -50,15 +50,15 @@ rm $templateDir -r -force
 
 ## Features
 
-For more information on these features, check out [Program.cs](./Program.cs),
-[Middleware/](./Middleware), and the various `appsettings*.json` file(s).
-
-Additionally, [Controllers/WeatherForecastController.cs](Controllers/WeatherForecastController.cs)
-and [SawyerCSharpWebApi.http](./SawyerCSharpWebApi.http) have examples of using
-a lot of these features.
-
-Note that [TODO.md](./TODO.md) has finalization instructions for users of the
-template.
+- For more information on these features, check out [Program.cs](./Program.cs),
+  [Middleware/](./Middleware), and the various `appsettings*.json` file(s).
+- Additionally, [Controllers/WeatherForecastController.cs](Controllers/WeatherForecastController.cs)
+  and [SawyerCSharpWebApi.http](./SawyerCSharpWebApi.http) have examples of using
+  a lot of these features.
+- [TODO.md](./TODO.md) has finalization instructions for users of the
+  template.
+- Every settings POCO is validated on start up, so running the project will
+  help you quickly identify missing settings.
 
 ### Logging via Serilog
 
@@ -114,7 +114,8 @@ This class tells the SwaggerGen that the header is required for POST requests.
 
 ### Authentication
 
-This template defaults to requiring requests to be from an authenticated user.
+This template defaults to requiring requests to be from an authenticated user
+and have the authentication handler populate `HttpContext.User.Identity.Name`.
 Additionally, this template has a few pre-built options for authentication.
 
 Once a user has authenticated, they are logged with their host and requested

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace SawyerWebApiCtlrs.Middleware;
+namespace SawyerCSharpWebApi.Middleware;
 
 /// <summary>
 /// POST requests are not idempotent, but a variety of events can occur when
@@ -26,7 +26,8 @@ namespace SawyerWebApiCtlrs.Middleware;
 /// <br /> 3. It must not contain any '|'s.
 /// <br />
 /// This middleware requires the <see cref="HttpContext.User"/>'s
-/// <see cref="IIdentity.Name"/> to be set to a non-null or whitespace value.
+/// <see cref="IIdentity.Name"/> to be set to a unique value that is not
+/// non-null or whitespace.
 /// </remarks>
 public class IdempotentPosts(
     IIdempotentPostsCache cache,

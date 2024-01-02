@@ -10,7 +10,7 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace SawyerWebApiCtlrs.Middleware;
+namespace SawyerCSharpWebApi.Middleware;
 
 public class ApiKeyAuthenticationSchemeHandler
     : AuthenticationHandler<ApiKeyAuthenticationSchemeHandler.Settings>

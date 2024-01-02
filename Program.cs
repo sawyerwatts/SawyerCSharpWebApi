@@ -4,19 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.OpenApi.Models;
-using SawyerWebApiCtlrs.HealthChecks;
-using SawyerWebApiCtlrs.Middleware;
+using SawyerCSharpWebApi.HealthChecks;
+using SawyerCSharpWebApi.Middleware;
 using Serilog;
 
-// todo: get template params working to determine middlewares
-//      https://github.com/dotnet/templating/wiki/Reference-for-template.json#parameter-symbol
-//      https://github.com/dotnet/templating/wiki/Using-Primary-Outputs-for-Post-Actions
-//          https://github.com/dotnet/templating/wiki/Post-Action-Registry
-//      https://github.com/dotnet/templating/wiki/Conditional-processing-and-comment-syntax
-//      look at .NET's webapi template's --use-controllers
-
 var builder = WebApplication.CreateBuilder(args);
-
 
 // ----------------------------------------------------------------------------
 // Non-middleware services
@@ -61,9 +53,13 @@ IdempotentPostsInMemoryCache.RegisterTo(builder);
 RequestTimeouts.Add(builder);
 RateLimiting.Add(builder);
 
+#if (UseApiKey == true)
 ApiKeyAuthenticationSchemeHandler.Add(builder);
+#elif (UseJwt == true)
 JwtAuthentication.Add(builder);
+#endif
 
+#if (UseApiKey == true || UseJwt == true || OnlyRequireAuth == true)
 // Set the fallback/default authorization policy to requiring authenticated
 // users. Add [AllowAnonymous] or [Authorize(PolicyName="MyPolicy")] to
 // loosen/harden the authorization.
@@ -72,8 +68,11 @@ builder.Services.AddAuthorization(options =>
 {
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
+        .RequireAssertion(context =>
+            !string.IsNullOrWhiteSpace(context.User.Identity?.Name))
         .Build();
 });
+#endif
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -81,7 +80,7 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo()
     {
         Version = "v1",
-        Title = "SawyerWebApiCtlrs",
+        Title = "SawyerCSharpWebApi",
         Description = "",
     });
 
@@ -90,8 +89,11 @@ builder.Services.AddSwaggerGen(options =>
 
     IdempotentPosts.SetupSwaggerGen(options);
 
+#if (UseApiKey == true)
     ApiKeyAuthenticationSchemeHandler.SetupSwaggerGen(options);
+#elif (UseJwt == true)
     JwtAuthentication.SetupSwaggerGen(options);
+#endif
 });
 
 
@@ -120,6 +122,7 @@ try
 
     app.UseRequestTimeouts();
 
+#if (UseApiKey == true || UseJwt == true || OnlyRequireAuth == true)
     app.UseAuthorization();
     app.Use(async (context, next) =>
     {
@@ -135,6 +138,7 @@ try
 
         await next(context);
     });
+#endif
 
     app.UseRateLimiter();
 

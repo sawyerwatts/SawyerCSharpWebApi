@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SawyerWebApiCtlrs.Middleware;
+using SawyerCSharpWebApi.Middleware;
 
-namespace SawyerWebApiCtlrs;
+namespace SawyerCSharpWebApi;
 
 [ApiController]
 [Route($"{ControllerConsts.UriRoot}/[controller]")]

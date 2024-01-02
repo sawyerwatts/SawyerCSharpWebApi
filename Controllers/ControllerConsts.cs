@@ -1,4 +1,4 @@
-namespace SawyerWebApiCtlrs;
+namespace SawyerCSharpWebApi;
 
 public static class ControllerConsts
 {

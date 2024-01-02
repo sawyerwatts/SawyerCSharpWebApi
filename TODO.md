@@ -37,8 +37,10 @@ sticky sessions.
 
 ### Authentication
 
-The `appsettings*.json` files are not configured with any values. These will
-need to be set up, ideally via a deployment pipeline or similar.
+If an API key or JWT were selected, the `appsettings*.json` files are not
+configured with any authentication settings. These will need to be set up under
+the `"Middleware"` section of the `IConfiguration`. See the chosen
+authentication class for more.
 
 ## Request size limiting
 

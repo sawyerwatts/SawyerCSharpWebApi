@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace SawyerWebApiCtlrs.HealthChecks;
+namespace SawyerCSharpWebApi.HealthChecks;
 
 public class SampleHealthCheck : IHealthCheck
 {
