@@ -60,58 +60,6 @@ rm $templateDir -r -force
 - Every settings POCO is validated on start up, so running the project will
   help you quickly identify missing settings.
 
-### Logging via Serilog
-
-This template comes pre-baked with Serilog configured as the implementation to
-the built in `ILogger<T>`, and these settings are controlled via the
-`appsettings*.json` files. Serilog is configured to buffer file writes and
-to write file and console logs via a background thread.
-
-### Health checks
-
-This has an example of setting up a health check, and it maps the health
-   checks to `{baseURL}/_health` (configurable in `Program.cs`).
-
-### `Accept` validation
-
-By default, ASP.NET Core will return `415: Unsupported media type` when a
-request is received in a `Content-Type` that cannot be parsed. This template
-will tell ASP.NET Core to return `406: Not acceptable` when the
-`Accept` is not supported.
-
-### API Versioning
-
-This template will detail the supported and deprecated versions of an API
-via headers, and it will validate that the version supplied actually exists,
-especially when using URL-based versioning.
-
-### Trace/Correlation/Request IDs
-
-This template will, via the `TraceGuid` class, configure middleware to read in
-(or if not supplied, create) a trace GUID from request header `X-Trace-GUID`,
-add it to the logging context so the value is present in logs for that request,
-load the GUID into the scoped service, and return the GUID in the response
-using the `X-Trace-GUID` header.
-
-### Idempotent POSTs
-
-For background, POST requests struggle with exactly-once semantics as POSTs
-will attempt to create, but if a network error occurs on the response (or
-other situations occur), the client will not know if their creation request as
-fullfilled. PUTs are preferable for this reason, but PUTs are not always
-possible.
-
-This template will, via the `IdempotentPosts` class, configure middleware to
-require a `X-Idempotency-Key` request header. This allows the template to cache
-the client's idempotency key (plus their identity and the endpoint they are
-POSTing to) in order to achieve exactly once semantics for a configurable
-period of time. With this middleware,
-clients can confidently resubmit (within that configurable timeframe) as many
-times as needed to ensure their request goes through. When resubmitting a
-completed POST, `409: Conflict` is returned.
-
-This class tells the SwaggerGen that the header is required for POST requests.
-
 ### Authentication
 
 This template defaults to requiring requests to be from an authenticated user
@@ -149,6 +97,46 @@ This template will, via the `JwtAuthentication` class, validate that the JWT:
 This class will tell the SwaggerGen that this authentication format is
 required.
 
+### Idempotent POSTs
+
+For background, POST requests struggle with exactly-once semantics as POSTs
+will attempt to create, but if a network error occurs on the response (or
+other situations occur), the client will not know if their creation request as
+fullfilled. PUTs are preferable for this reason, but PUTs are not always
+possible.
+
+This template will, via the `IdempotentPosts` class, configure middleware to
+require a `X-Idempotency-Key` request header. This allows the template to cache
+the client's idempotency key (plus their identity and the endpoint they are
+POSTing to) in order to achieve exactly once semantics for a configurable
+period of time. With this middleware,
+clients can confidently resubmit (within that configurable timeframe) as many
+times as needed to ensure their request goes through. When resubmitting a
+completed POST, `409: Conflict` is returned.
+
+This class tells the SwaggerGen that the header is required for POST requests.
+
+### Trace/Correlation/Request IDs
+
+This template will, via the `TraceGuid` class, configure middleware to read in
+(or if not supplied, create) a trace GUID from request header `X-Trace-GUID`,
+add it to the logging context so the value is present in logs for that request,
+load the GUID into the scoped service, and return the GUID in the response
+using the `X-Trace-GUID` header.
+
+### `Accept` validation
+
+By default, ASP.NET Core will return `415: Unsupported media type` when a
+request is received in a `Content-Type` that cannot be parsed. This template
+will tell ASP.NET Core to return `406: Not acceptable` when the
+`Accept` is not supported.
+
+### API Versioning
+
+This template will detail the supported and deprecated versions of an API
+via headers, and it will validate that the version supplied actually exists,
+especially when using URL-based versioning.
+
 ### Obfuscation of payload on server responses
 
 Server errors will likely leak implementation details and/or sensitive
@@ -180,8 +168,20 @@ functionality is desired), it is recommended to remove this middleware.
 This template configures the request timeout middleware with configurable
 defaults.
 
+### Health checks
+
+This has an example of setting up a health check, and it maps the health
+checks to `{baseURL}/_health` (configurable in `Program.cs`).
+
 ### Swagger
 
 This template automatically loads the XML Docs into SwaggerGen, as well as
 versioning the specification and containing other middleware's headers and
 authentication requirements.
+
+### Logging via Serilog
+
+This template comes pre-baked with Serilog configured as the implementation to
+the built in `ILogger<T>`, and these settings are controlled via the
+`appsettings*.json` files. Serilog is configured to buffer file writes and
+to write file and console logs via a background thread.
