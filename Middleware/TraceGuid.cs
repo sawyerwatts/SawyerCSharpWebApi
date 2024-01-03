@@ -1,7 +1,11 @@
 using System.Net;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using Microsoft.OpenApi.Models;
+
 using Serilog.Context;
+
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SawyerCSharpWebApi.Middleware;
 
@@ -111,6 +115,32 @@ public class TraceGuid(
             value: new StringValues(trace.ToString()));
         using (LogContext.PushProperty("TraceGuid", trace))
             await next(context);
+    }
+
+    public static void SetupSwaggerGen(
+        SwaggerGenOptions options)
+    {
+        options.OperationFilter<HeaderSwaggerFilter>();
+    }
+
+    private class HeaderSwaggerFilter : IOperationFilter
+    {
+        public void Apply(
+            OpenApiOperation operation,
+            OperationFilterContext context)
+        {
+            operation.Parameters ??= [];
+            operation.Parameters.Add(new OpenApiParameter
+            {
+                Name = Header,
+                In = ParameterLocation.Header,
+                Required = false,
+                Schema = new OpenApiSchema
+                {
+                    Type = "string"
+                }
+            });
+        }
     }
 
     private class Settings

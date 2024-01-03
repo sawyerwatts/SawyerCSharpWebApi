@@ -89,6 +89,7 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
     IdempotentPosts.SetupSwaggerGen(options);
+    TraceGuid.SetupSwaggerGen(options);
 
 #if (UseApiKey == true)
     ApiKeyAuthentication.SetupSwaggerGen(options);

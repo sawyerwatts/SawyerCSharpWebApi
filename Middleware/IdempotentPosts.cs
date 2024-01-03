@@ -191,10 +191,10 @@ public class IdempotentPosts(
     public static void SetupSwaggerGen(
         SwaggerGenOptions options)
     {
-        options.OperationFilter<IdempotencyHeaderSwaggerAttribute>();
+        options.OperationFilter<HeaderSwaggerFilter>();
     }
 
-    private class IdempotencyHeaderSwaggerAttribute : IOperationFilter
+    private class HeaderSwaggerFilter : IOperationFilter
     {
         public void Apply(
             OpenApiOperation operation,
