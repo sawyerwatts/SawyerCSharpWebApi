@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Security.Principal;
-using System.Text;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.OpenApi.Models;
@@ -12,14 +13,14 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SawyerCSharpWebApi.Middleware;
 
-public class ApiKeyAuthenticationSchemeHandler
-    : AuthenticationHandler<ApiKeyAuthenticationSchemeHandler.Settings>
+public class ApiKeyAuthentication
+    : AuthenticationHandler<ApiKeyAuthentication.Settings>
 {
     public const string AuthScheme = "ApiKey";
     private const string Header = "X-API-Key";
 
     [Obsolete("Obsolete")]
-    public ApiKeyAuthenticationSchemeHandler(
+    public ApiKeyAuthentication(
         IOptionsMonitor<Settings> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
@@ -27,7 +28,7 @@ public class ApiKeyAuthenticationSchemeHandler
         : base(options, logger, encoder, clock)
     { }
 
-    public ApiKeyAuthenticationSchemeHandler(
+    public ApiKeyAuthentication(
         IOptionsMonitor<Settings> options,
         ILoggerFactory logger,
         UrlEncoder encoder)
@@ -44,10 +45,10 @@ public class ApiKeyAuthenticationSchemeHandler
             return Task.FromResult(
                 AuthenticateResult.Fail($"Header '{Header}' has a null or whitespace value"));
 
-        byte[] actualKey = Encoding.UTF8.GetBytes(apiKey!);
+        var actualKey = MemoryMarshal.Cast<char, byte>(apiKey.First().AsSpan());
         foreach (KeyValuePair<string, string> keyToName in Options.ApiKeyToIdentityName)
         {
-            byte[] expectedKey = Encoding.UTF8.GetBytes(keyToName.Key);
+            var expectedKey = MemoryMarshal.Cast<char, byte>(keyToName.Key.AsSpan());
             if (CryptographicOperations.FixedTimeEquals(expectedKey, actualKey))
             {
                 var claims = new[] { new Claim(ClaimTypes.Name, keyToName.Value) };
@@ -76,7 +77,7 @@ public class ApiKeyAuthenticationSchemeHandler
             validateAllProperties: true);
 
         builder.Services.AddAuthentication(AuthScheme)
-            .AddScheme<Settings, ApiKeyAuthenticationSchemeHandler>(
+            .AddScheme<Settings, ApiKeyAuthentication>(
                 AuthScheme,
                 options => options.ApiKeyToIdentityName = settings.ApiKeyToIdentityName);
     }
@@ -86,10 +87,11 @@ public class ApiKeyAuthenticationSchemeHandler
     {
         options.AddSecurityDefinition("apiKey", new OpenApiSecurityScheme
         {
-            Description = $"API key authorization header. Example: \"{Header}: {{token}}\"",
-            In = ParameterLocation.Header,
             Name = Header,
             Type = SecuritySchemeType.ApiKey,
+            In = ParameterLocation.Header,
+            Description = $"API key authorization header. Example: \"{Header}: {{token}}\"",
+            Scheme = "ApiKeyScheme",
         });
 
         options.AddSecurityRequirement(new OpenApiSecurityRequirement

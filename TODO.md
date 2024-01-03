@@ -7,7 +7,7 @@ utilized.
 
 - Replace `SampleHealthCheck` with a real health check.
 - [Program.cs](./Program.cs)'s `MapHealthChecks` could use `RequireHost`
-  instead of (or in addition to) existing default authentication policy.
+  in addition to `AllowAnonymous`.
 - Ideally, have monitoring in place to periodically check that the API is still
   healthy.
 

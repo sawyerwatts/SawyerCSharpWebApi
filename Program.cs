@@ -41,6 +41,7 @@ builder.Services
     {
         options.ReportApiVersions = true;
     })
+    // Added to ensure API version is checked (else, it's weirdly hit or miss):
     .AddMvc();
 
 builder.Services.AddScoped<ObfuscatePayloadOfServerErrors>();
@@ -54,7 +55,7 @@ RequestTimeouts.Add(builder);
 RateLimiting.Add(builder);
 
 #if (UseApiKey == true)
-ApiKeyAuthenticationSchemeHandler.Add(builder);
+ApiKeyAuthentication.Add(builder);
 #elif (UseJwt == true)
 JwtAuthentication.Add(builder);
 #endif
@@ -90,7 +91,7 @@ builder.Services.AddSwaggerGen(options =>
     IdempotentPosts.SetupSwaggerGen(options);
 
 #if (UseApiKey == true)
-    ApiKeyAuthenticationSchemeHandler.SetupSwaggerGen(options);
+    ApiKeyAuthentication.SetupSwaggerGen(options);
 #elif (UseJwt == true)
     JwtAuthentication.SetupSwaggerGen(options);
 #endif
@@ -149,10 +150,12 @@ try
     // -------------------
 
     app.MapControllers();
-    app.MapHealthChecks("/_health", new HealthCheckOptions
-    {
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
-    });
+    app
+        .MapHealthChecks("/_health", new HealthCheckOptions
+        {
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+        })
+        .AllowAnonymous();
 
     logger.LogInformation("Instantiating app services and running");
     app.Run();
