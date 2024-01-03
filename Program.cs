@@ -28,13 +28,15 @@ builder.Services.AddSerilog();
 builder.Services.AddHealthChecks()
     .AddCheck<SampleHealthCheck>("Sample");
 
-builder.Services.AddControllers(options =>
-{
-    // If request body cannot be formatted, ASP.NET Core will automatically
-    // return 415; the following enables 406 when Accept's value doesn't have a
-    // formatter (because otherwise JSON is returned regardless of the Accept).
-    options.ReturnHttpNotAcceptable = true;
-});
+builder.Services
+    .AddControllers(options =>
+    {
+        // If request body cannot be formatted, ASP.NET Core will automatically
+        // return 415; the following enables 406 when Accept's value doesn't have a
+        // formatter (because otherwise JSON is returned regardless of the Accept).
+        options.ReturnHttpNotAcceptable = true;
+    })
+    .AddNewtonsoftJson();
 
 builder.Services
     .AddApiVersioning(options =>
