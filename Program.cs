@@ -109,7 +109,6 @@ builder.Services.AddSwaggerGen(options =>
 //      order, so deviate from that list with caution.
 
 var app = builder.Build();
-ILogger<Program> logger = app.Services.GetRequiredService<ILogger<Program>>();
 try
 {
     app.Use(TraceGuid.Middleware);
@@ -160,13 +159,13 @@ try
         })
         .AllowAnonymous();
 
-    logger.LogInformation("Instantiating app services and running");
+    app.Logger.LogInformation("Instantiating app services and running");
     app.Run();
-    logger.LogInformation("App completed");
+    app.Logger.LogInformation("App completed");
 }
 catch (Exception exc)
 {
-    logger.LogCritical(exc, "An unhandled exception occurred, the app has crashed");
+    app.Logger.LogCritical(exc, "An unhandled exception occurred, the app has crashed");
     throw;
 }
 finally
