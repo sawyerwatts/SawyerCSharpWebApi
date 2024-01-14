@@ -13,10 +13,16 @@ namespace SawyerCSharpWebApi.Middleware;
 /// Some exceptions, like configuration validation exceptions, can't be caught
 /// at this stage.
 /// </remarks>
-public class ObfuscatePayloadOfServerErrors(
-    ILogger<ObfuscatePayloadOfServerErrors> logger)
-    : IMiddleware
+public class ObfuscatePayloadOfServerErrors : IMiddleware
 {
+    private readonly ILogger<ObfuscatePayloadOfServerErrors> _logger;
+
+    public ObfuscatePayloadOfServerErrors(
+        ILogger<ObfuscatePayloadOfServerErrors> logger)
+    {
+        _logger = logger;
+    }
+
     public async Task InvokeAsync(
         HttpContext context,
         RequestDelegate next)
@@ -27,12 +33,12 @@ public class ObfuscatePayloadOfServerErrors(
         }
         catch (Exception exc)
         {
-            logger.LogError(exc, "An unhandled exception occurred, returning a 500");
+            _logger.LogError(exc, "An unhandled exception occurred, returning a 500");
             if (context.Response.HasStarted)
             {
                 const string msg =
                     "The response has already started being written; aborting the pipeline to ensure no data leak is leaked to the client";;
-                logger.LogError(msg);
+                _logger.LogError(msg);
                 throw new InvalidOperationException(msg);
             }
 

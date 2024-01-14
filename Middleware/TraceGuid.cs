@@ -18,25 +18,40 @@ namespace SawyerCSharpWebApi.Middleware;
 /// <br />
 /// This is also known as a request ID or a trace ID.
 /// </remarks>
-public class TraceGuid(
-    Guid? raw = null)
+public class TraceGuid
 {
-    public Guid Value => raw
+    private Guid? _raw;
+
+    /// <remarks>
+    /// When retrieving this service (presumably via constructor dependency
+    /// injection), it is recommended to <see cref="Value"/> the instance in that
+    /// constructor. This will ensure that misconfigured pipelines are detected
+    /// before the request starts being meaningfully executed.
+    /// <br />
+    /// This is also known as a request ID or a trace ID.
+    /// </remarks>
+    public TraceGuid(
+        Guid? raw = null)
+    {
+        _raw = raw;
+    }
+
+    public Guid Value => _raw
         ?? throw new InvalidOperationException("Null value contained, instance was not configured");
 
     private Guid? Raw
     {
-        get => raw;
+        get => _raw;
         set
         {
             if (value is null)
                 throw new ArgumentNullException(nameof(Raw));
 
-            if (raw is not null)
+            if (_raw is not null)
                 throw new InvalidOperationException(
-                    $"Instance is already configured to {raw}, will not reconfigure to {value}");
+                    $"Instance is already configured to {_raw}, will not reconfigure to {value}");
 
-            raw = value;
+            _raw = value;
         }
     }
 
