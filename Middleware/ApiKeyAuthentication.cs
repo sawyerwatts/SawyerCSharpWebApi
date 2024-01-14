@@ -5,7 +5,6 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.OpenApi.Models;
@@ -71,10 +70,11 @@ public class ApiKeyAuthentication
         builder.Configuration
             .GetRequiredSection("Middleware:ApiKeyAuthentication")
             .Bind(settings);
-        Validator.ValidateObject(
-            instance: settings,
-            validationContext: new ValidationContext(settings),
-            validateAllProperties: true);
+        ValidateOptionsResult results =
+            new ValidateApiKeyAuthenticationSettings()
+                .Validate(nameof(ApiKeyAuthentication), settings);
+        if (results.Failed)
+            throw new InvalidOperationException(results.FailureMessage);
 
         builder.Services.AddAuthentication(AuthScheme)
             .AddScheme<Settings, ApiKeyAuthentication>(
@@ -124,3 +124,7 @@ public class ApiKeyAuthentication
         public Dictionary<string, string> ApiKeyToIdentityName { get; set; } = [];
     }
 }
+
+[OptionsValidator]
+public partial class ValidateApiKeyAuthenticationSettings
+    : IValidateOptions<ApiKeyAuthentication.Settings>;

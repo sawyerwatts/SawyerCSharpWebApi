@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -31,10 +32,11 @@ public class JwtAuthentication
         builder.Configuration
             .GetRequiredSection("Middleware:JwtAuthentication")
             .Bind(settings);
-        Validator.ValidateObject(
-            instance: settings,
-            validationContext: new ValidationContext(settings),
-            validateAllProperties: true);
+        ValidateOptionsResult results =
+            new ValidateJwtAuthenticationSettings()
+                .Validate(nameof(JwtAuthentication), settings);
+        if (results.Failed)
+            throw new InvalidOperationException(results.FailureMessage);
 
         builder.Services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -90,7 +92,7 @@ public class JwtAuthentication
         });
     }
 
-    private class Settings
+    public class Settings
     {
         [Required]
         public string Issuer { get; set; } = "";
@@ -109,3 +111,7 @@ public class JwtAuthentication
         public int ClockSkewSec { get; set; } = 90;
     }
 }
+
+[OptionsValidator]
+public partial class ValidateJwtAuthenticationSettings
+    : IValidateOptions<JwtAuthentication.Settings>;

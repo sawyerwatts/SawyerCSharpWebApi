@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Http.Timeouts;
+using Microsoft.Extensions.Options;
 
 namespace SawyerCSharpWebApi.Middleware;
 
@@ -16,10 +17,11 @@ public class RequestTimeouts
         builder.Configuration
             .GetRequiredSection("Middleware:RequestTimeouts")
             .Bind(settings);
-        Validator.ValidateObject(
-            instance: settings,
-            validationContext: new ValidationContext(settings),
-            validateAllProperties: true);
+        ValidateOptionsResult results =
+            new ValidateRequestTimeoutsSettings()
+                .Validate(nameof(RequestTimeouts), settings);
+        if (results.Failed)
+            throw new InvalidOperationException(results.FailureMessage);
 
         builder.Services.AddRequestTimeouts(options =>
         {
@@ -43,9 +45,13 @@ public class RequestTimeouts
         });
     }
 
-    private class Settings
+    public class Settings
     {
         [Range(1, int.MaxValue)]
         public int TimeoutMs { get; set; }
     }
 }
+
+[OptionsValidator]
+public partial class ValidateRequestTimeoutsSettings
+    : IValidateOptions<RequestTimeouts.Settings>;

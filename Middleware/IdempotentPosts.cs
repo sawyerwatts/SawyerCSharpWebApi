@@ -182,9 +182,9 @@ public class IdempotentPosts(
         WebApplicationBuilder builder)
     {
         builder.Services.AddTransient<IdempotentPosts>();
+        builder.Services.AddSingleton<IValidateOptions<Settings>, ValidateIdempotentPostsSettings>();
         builder.Services.AddOptions<Settings>()
             .Bind(builder.Configuration.GetRequiredSection("Middleware:IdempotentPosts"))
-            .ValidateDataAnnotations()
             .ValidateOnStart();
     }
 
@@ -232,6 +232,10 @@ public class IdempotentPosts(
         public int UserKeyMaxLength { get; set; }
     }
 }
+
+[OptionsValidator]
+public partial class ValidateIdempotentPostsSettings
+    : IValidateOptions<IdempotentPosts.Settings>;
 
 /// <remarks>
 /// Be sure implementations will clean themselves out, and when the data isn't
@@ -300,9 +304,9 @@ public class IdempotentPostsInMemoryCache(
     {
         builder.Services.AddMemoryCache();
         builder.Services.AddSingleton<IIdempotentPostsCache, IdempotentPostsInMemoryCache>();
+        builder.Services.AddSingleton<IValidateOptions<Settings>, ValidateIdempotentPostsInMemoryCacheSettings>();
         builder.Services.AddOptions<Settings>()
             .Bind(builder.Configuration.GetRequiredSection("Middleware:IdempotentPostsInMemoryCache"))
-            .ValidateDataAnnotations()
             .ValidateOnStart();
     }
 
@@ -327,3 +331,7 @@ public class IdempotentPostsInMemoryCache(
         public int ExpirationScanFrequencySec { get; set; }
     }
 }
+
+[OptionsValidator]
+public partial class ValidateIdempotentPostsInMemoryCacheSettings
+    : IValidateOptions<IdempotentPostsInMemoryCache.Settings>;

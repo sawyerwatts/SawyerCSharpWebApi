@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.RateLimiting;
 
+using Microsoft.Extensions.Options;
+
 namespace SawyerCSharpWebApi.Middleware;
 
 /// <summary>
@@ -31,10 +33,11 @@ public static class RateLimiting
         builder.Configuration
             .GetRequiredSection("Middleware:RateLimiting")
             .Bind(settings);
-        Validator.ValidateObject(
-            instance: settings,
-            validationContext: new ValidationContext(settings),
-            validateAllProperties: true);
+        ValidateOptionsResult results =
+            new ValidateRateLimitingSettings()
+                .Validate(nameof(RateLimiting), settings);
+        if (results.Failed)
+            throw new InvalidOperationException(results.FailureMessage);
 
         builder.Services.AddRateLimiter(limiterOptions =>
         {
@@ -99,7 +102,7 @@ public static class RateLimiting
             ?? context.Request.Headers.Host.ToString();
     }
 
-    private class Settings
+    public class Settings
     {
         [Range(1, int.MaxValue)]
         public int ConcurrencyPermitLimit { get; set; }
@@ -114,3 +117,7 @@ public static class RateLimiting
         public int IdentityOrHostWindowSec { get; set; }
     }
 }
+
+[OptionsValidator]
+public partial class ValidateRateLimitingSettings
+    : IValidateOptions<RateLimiting.Settings>;

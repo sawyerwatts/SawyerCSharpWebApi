@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
@@ -48,7 +49,6 @@ public class TraceGuid(
         builder.Services.AddScoped<TraceGuid>();
         builder.Services.AddOptions<Settings>()
             .Bind(builder.Configuration.GetRequiredSection("Middleware:TraceGuid"))
-            .ValidateDataAnnotations()
             .ValidateOnStart();
     }
 
@@ -143,7 +143,7 @@ public class TraceGuid(
         }
     }
 
-    private class Settings
+    public class Settings
     {
         public bool ReadFromRequestIfPresent { get; set; }
     }
