@@ -22,14 +22,6 @@ public class TraceGuid
 {
     private Guid? _raw;
 
-    /// <remarks>
-    /// When retrieving this service (presumably via constructor dependency
-    /// injection), it is recommended to <see cref="Value"/> the instance in that
-    /// constructor. This will ensure that misconfigured pipelines are detected
-    /// before the request starts being meaningfully executed.
-    /// <br />
-    /// This is also known as a request ID or a trace ID.
-    /// </remarks>
     public TraceGuid(
         Guid? raw = null)
     {
