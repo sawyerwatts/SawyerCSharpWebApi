@@ -45,6 +45,16 @@ public class IdempotentPosts : IMiddleware
         _logger = logger;
     }
 
+    public static void RegisterTo(
+        WebApplicationBuilder builder)
+    {
+        builder.Services.AddTransient<IdempotentPosts>();
+        builder.Services.AddSingleton<IValidateOptions<Settings>, ValidateIdempotentPostsSettings>();
+        builder.Services.AddOptions<Settings>()
+            .Bind(builder.Configuration.GetRequiredSection("Middleware:IdempotentPosts"))
+            .ValidateOnStart();
+    }
+
     /// <remarks>
     /// Not suitable for sensitive data.
     /// </remarks>
@@ -186,16 +196,6 @@ public class IdempotentPosts : IMiddleware
             + "The server will not repeat this idempotent operation, at least "
             + "not until the client's existing idempotency key against the "
             + "target URI has expired.";
-    }
-
-    public static void RegisterTo(
-        WebApplicationBuilder builder)
-    {
-        builder.Services.AddTransient<IdempotentPosts>();
-        builder.Services.AddSingleton<IValidateOptions<Settings>, ValidateIdempotentPostsSettings>();
-        builder.Services.AddOptions<Settings>()
-            .Bind(builder.Configuration.GetRequiredSection("Middleware:IdempotentPosts"))
-            .ValidateOnStart();
     }
 
     public static void SetupSwaggerGen(

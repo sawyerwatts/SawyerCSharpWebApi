@@ -28,6 +28,18 @@ public class TraceGuid
         _raw = raw;
     }
 
+    /// <remarks>
+    /// Don't forget to use this middleware via <see cref="Middleware"/>.
+    /// </remarks>
+    public static void RegisterTo(
+        WebApplicationBuilder builder)
+    {
+        builder.Services.AddScoped<TraceGuid>();
+        builder.Services.AddOptions<Settings>()
+            .Bind(builder.Configuration.GetRequiredSection("Middleware:TraceGuid"))
+            .ValidateOnStart();
+    }
+
     public Guid Value => _raw
         ?? throw new InvalidOperationException("Null value contained, instance was not configured");
 
@@ -45,18 +57,6 @@ public class TraceGuid
 
             _raw = value;
         }
-    }
-
-    /// <remarks>
-    /// Don't forget to use this middleware via <see cref="Middleware"/>.
-    /// </remarks>
-    public static void RegisterTo(
-        WebApplicationBuilder builder)
-    {
-        builder.Services.AddScoped<TraceGuid>();
-        builder.Services.AddOptions<Settings>()
-            .Bind(builder.Configuration.GetRequiredSection("Middleware:TraceGuid"))
-            .ValidateOnStart();
     }
 
     private const string Header = "X-Trace-GUID";
