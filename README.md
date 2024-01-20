@@ -29,10 +29,11 @@ Here are the steps in PowerShell:
 $templateDir="$env:USERPROFILE\.dotnetTemplates\SawyerCSharpWebApi"
 git clone https://github.com/sawyerwatts/SawyerCSharpWebApi.git $templateDir
 rm $templateDir\.git -r -force
-rm $template_dir\.gitignore
-rm $template_dir\.editorconfig
-rm $template_dir\README.md
-rm $template_dir\LICENSE
+rm $templateDir\.gitignore
+rm $templateDir\.editorconfig
+rm $templateDir\README.md
+rm $templateDir\LICENSE
+
 dotnet new install $templateDir
 ```
 
