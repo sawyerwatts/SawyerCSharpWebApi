@@ -37,7 +37,7 @@ public class ObfuscatePayloadOfServerErrors : IMiddleware
             if (context.Response.HasStarted)
             {
                 const string msg =
-                    "The response has already started being written; aborting the pipeline to ensure no data leak is leaked to the client";;
+                    "The response has already started being written; aborting the pipeline to ensure no data leak is leaked to the client"; ;
                 _logger.LogError(msg);
                 throw new InvalidOperationException(msg);
             }

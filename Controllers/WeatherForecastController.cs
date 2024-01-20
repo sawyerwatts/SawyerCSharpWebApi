@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+
 using Asp.Versioning;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using SawyerCSharpWebApi.Middleware;
 
 namespace SawyerCSharpWebApi;
@@ -16,7 +19,16 @@ public class WeatherForecastController : ControllerBase
 {
     private static readonly string[] Summaries =
     [
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        "Freezing",
+        "Bracing",
+        "Chilly",
+        "Cool",
+        "Mild",
+        "Warm",
+        "Balmy",
+        "Hot",
+        "Sweltering",
+        "Scorching"
     ];
 
     private readonly TraceGuid _traceGuid;
@@ -37,11 +49,11 @@ public class WeatherForecastController : ControllerBase
         _logger.LogInformation("{Dtm}", DateTime.Now.ToString());
         ActionResult<IEnumerable<WeatherForecast>> resp = Ok(
             Enumerable.Range(1, 5).Select(index => new WeatherForecast
-                {
-                    DateTime = DateTime.Now,
-                    TemperatureC = Random.Shared.Next(-20, 55),
-                    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-                })
+            {
+                DateTime = DateTime.Now,
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            })
                 .ToArray());
         return Task.FromResult(resp);
     }

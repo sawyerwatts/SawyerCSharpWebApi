@@ -1,11 +1,15 @@
 using System.Reflection;
+
 using HealthChecks.UI.Client;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.OpenApi.Models;
+
 using SawyerCSharpWebApi.HealthChecks;
 using SawyerCSharpWebApi.Middleware;
+
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

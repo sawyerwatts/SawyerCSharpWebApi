@@ -2,10 +2,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Net;
 using System.Security.Principal;
+
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.OpenApi.Models;
+
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SawyerCSharpWebApi.Middleware;
