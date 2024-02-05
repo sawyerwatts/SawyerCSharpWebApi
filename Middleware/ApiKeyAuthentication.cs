@@ -55,8 +55,8 @@ public class ApiKeyAuthentication
             if (CryptographicOperations.FixedTimeEquals(expectedKey, actualKey))
             {
                 Claim[] claims = [new Claim(ClaimTypes.Name, keyToName.Value)];
-                var identity = new ClaimsIdentity(claims, Scheme.Name);
-                var principal = new ClaimsPrincipal(identity);
+                ClaimsIdentity identity = new(claims, Scheme.Name);
+                ClaimsPrincipal principal = new(identity);
                 return Task.FromResult(
                     AuthenticateResult.Success(
                         new AuthenticationTicket(principal, AuthScheme)));
