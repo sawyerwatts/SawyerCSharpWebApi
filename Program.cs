@@ -12,7 +12,7 @@ using SawyerCSharpWebApi.Middleware;
 
 using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // ----------------------------------------------------------------------------
 // Non-middleware services
@@ -112,7 +112,7 @@ builder.Services.AddSwaggerGen(options =>
 //      Note that lots of the built in middleware need to run in a specific
 //      order, so deviate from that list with caution.
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 try
 {
     app.Use(TraceGuid.Middleware);

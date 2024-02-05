@@ -86,7 +86,7 @@ public class TraceGuid
             .GetRequiredService<IOptions<Settings>>()
             .Value;
 
-        Guid trace = Guid.NewGuid();
+        var trace = Guid.NewGuid();
         if (settings.ReadFromRequestIfPresent
             && context.Request.Headers.TryGetValue(Header, out StringValues supplied))
         {

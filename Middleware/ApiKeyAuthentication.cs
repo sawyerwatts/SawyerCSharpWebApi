@@ -46,13 +46,15 @@ public class ApiKeyAuthentication
             return Task.FromResult(
                 AuthenticateResult.Fail($"Header '{Header}' has a null or whitespace value"));
 
-        var actualKey = MemoryMarshal.Cast<char, byte>(apiKey.First().AsSpan());
+        ReadOnlySpan<byte> actualKey =
+            MemoryMarshal.Cast<char, byte>(apiKey.First().AsSpan());
         foreach (KeyValuePair<string, string> keyToName in Options.ApiKeyToIdentityName)
         {
-            var expectedKey = MemoryMarshal.Cast<char, byte>(keyToName.Key.AsSpan());
+            ReadOnlySpan<byte> expectedKey =
+                MemoryMarshal.Cast<char, byte>(keyToName.Key.AsSpan());
             if (CryptographicOperations.FixedTimeEquals(expectedKey, actualKey))
             {
-                var claims = new[] { new Claim(ClaimTypes.Name, keyToName.Value) };
+                Claim[] claims = [new Claim(ClaimTypes.Name, keyToName.Value)];
                 var identity = new ClaimsIdentity(claims, Scheme.Name);
                 var principal = new ClaimsPrincipal(identity);
                 return Task.FromResult(
