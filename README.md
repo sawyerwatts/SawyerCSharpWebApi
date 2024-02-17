@@ -173,7 +173,8 @@ functionality is desired), it is recommended to remove this middleware.
 ### Request Timeouts
 
 This template configures the request timeout middleware with configurable
-defaults.
+defaults. Note that `OperationCanceledException` is thrown by the .NET
+request timeout middleware when the period is reached.
 
 ### Health checks
 

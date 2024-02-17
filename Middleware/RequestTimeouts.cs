@@ -6,6 +6,10 @@ using Microsoft.Extensions.Options;
 
 namespace SawyerCSharpWebApi.Middleware;
 
+/// <remarks>
+/// Note that the .NET middleware will throw an
+/// <see cref="OperationCanceledException"/> when the timeout is reached.
+/// </remarks>
 public class RequestTimeouts
 {
     /// <remarks>
